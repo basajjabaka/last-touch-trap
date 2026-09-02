@@ -65,6 +65,7 @@ def base_layout(fig, height, xtitle=""):
         plot_bgcolor=SURFACE,
         font=dict(family=FONT, size=13, color=INK_2),
         showlegend=False,
+        dragmode=False,
         bargap=0.34,
         xaxis=dict(
             title=dict(text=xtitle, font=dict(size=12, color=MUTED)),
@@ -104,6 +105,20 @@ def emphasis_bar(series, height, xtitle, fmt="{:.2f}%", hover="{:.2f}%"):
         )
     )
     return base_layout(fig, height, xtitle)
+
+
+def as_widget(fig):
+    """Hand Shiny a FigureWidget with the Plotly modebar switched off.
+
+    shinywidgets merges `_config` into the widget's plotly config, so this is the
+    supported hook. Must run inside an active session, i.e. from @render_widget.
+    The charts are static bars whose only interaction is the hover tooltip, so the
+    zoom/pan/save toolbar is clutter -- and `dragmode=False` in base_layout stops
+    an accidental drag-zoom the (now hidden) reset button would have undone.
+    """
+    w = go.FigureWidget(fig)
+    w._config = {"displayModeBar": False, "displaylogo": False, **w._config}
+    return w
 
 
 def stat_tile(value, label, sub=""):
@@ -224,7 +239,7 @@ def server(input, output, session):
 
     @render_widget
     def share_chart():
-        return emphasis_bar(SHARES[model()], 340, "share of signups (%)")
+        return as_widget(emphasis_bar(SHARES[model()], 340, "share of signups (%)"))
 
     @render.ui
     def share_note():
@@ -260,12 +275,14 @@ def server(input, output, session):
         )
         fig = base_layout(fig, 250, "Paid Social share of signups (%)")
         fig.update_yaxes(autorange="reversed")
-        return fig
+        return as_widget(fig)
 
     @render_widget
     def timing_chart():
-        return emphasis_bar(TIMING, 250, "mean days before conversion",
-                            fmt="{:.1f}d", hover="{:.2f} days")
+        return as_widget(
+            emphasis_bar(TIMING, 250, "mean days before conversion",
+                         fmt="{:.1f}d", hover="{:.2f} days")
+        )
 
     @render.ui
     def paths_table():
