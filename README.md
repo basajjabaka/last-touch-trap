@@ -6,7 +6,8 @@ Paid Social does. But this is not a case for spending more either: hold the budg
 one quarter and run a holdout test that can actually measure it.
 
 Q2 2026 (1 Apr – 30 Jun), 30-day attribution window, 5,939 first conversions, 20,533 eligible
-touches. Working: [`notebook.ipynb`](notebook.ipynb) · logic: [`attribution.py`](attribution.py)
+touches. [**Dashboard**](https://01a05f7e-034a-10d1-f7a3-5b48ec27ca8e.share.connect.posit.cloud/)
+· working: [`notebook.ipynb`](notebook.ipynb) · logic: [`attribution.py`](attribution.py)
 
 ## The dashboard is right, and it is misleading
 
@@ -75,7 +76,7 @@ Findings hold in April, May and June separately, so this is structural, not a bl
 | [`app.py`](app.py) | Shiny dashboard — `shiny run app.py` |
 | `data/` | `touches.csv` (89,102 rows), `conversions.csv` (6,422 rows) |
 
-**Dashboard:** _(Posit Connect Cloud link — pending deploy)_
+**Dashboard:** https://01a05f7e-034a-10d1-f7a3-5b48ec27ca8e.share.connect.posit.cloud/
 
 Cleaning rules that bind: repeat subscribers counted under their **first** conversion only
 (483 customers, 6,422 rows → 5,939); touches eligible only where
